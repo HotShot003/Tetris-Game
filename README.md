@@ -37,9 +37,6 @@ Welcome to the Tetris Game Project repository! This project implements a classic
 
 - **Objective**: Complete horizontal lines by filling them with blocks to clear them and score points. Avoid stacking tetrominoes to the top of the board.
 
-## Setup Instructions
-
-
 ## Development Notes
 
 - Implemented using vanilla JavaScript for game logic.
