@@ -15,8 +15,8 @@ body {
   }
   
   #game_board {
-    width: 240px;
-    height: 480px;
+    width: 440px;
+    height: 580px;
     border: 5px solid #34495e;
     margin: 0 auto;
     position: relative;
@@ -54,4 +54,5 @@ body {
     box-shadow: inset 3px 3px 0 rgba(255, 255, 255, 0.3);
     border-radius: 3px;
   }
+  
   
