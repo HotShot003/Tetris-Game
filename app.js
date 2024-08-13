@@ -1,91 +1,85 @@
-// 1) Game Board SetUp
-
-const board_width = 18;
-const board_height = 24;
-
+const BOARD_WIDTH = 10;
+const BOARD_HEIGHT = 20;
 const board = [];
-
+const bgm = document.createElement("audio");
 const breakSound = document.createElement("audio");
+const drop = document.createElement("audio");
+let rotatedShape;
 
-let roratedShape;
 
-for(let row=0;row<board_height;row++){
+
+// Initialize the board
+for (let row = 0; row < BOARD_HEIGHT; row++) {
   board[row] = [];
-  for (let col = 0; col < board_width; col++) {
-    board[row][col] = 0
-    
+  for (let col = 0; col < BOARD_WIDTH; col++) {
+    board[row][col] = 0;
   }
 }
 
-
-// 2) Tetrominoes Array
-
+// Tetrominoes
 const tetrominoes = [
   {
     shape: [
       [1, 1],
       [1, 1],
     ],
-    color: "red", // O-Tetromino
+    color: "#ffd800",
   },
   {
     shape: [
       [0, 2, 0],
       [2, 2, 2],
     ],
-    color: "blue", // T-Tetromino
+    color: "#7925DD",
   },
   {
     shape: [
-      [3, 3, 3, 3],
+      [0, 3, 3],
+      [3, 3, 0],
     ],
-    color: "cyan", // I-Tetromino
+    color: "orange",
   },
   {
     shape: [
-      [4, 0, 0],
-      [4, 4, 4],
+      [4, 4, 0],
+      [0, 4, 4],
     ],
-    color: "orange", // L-Tetromino
+    color: "red",
   },
   {
     shape: [
-      [0, 0, 5],
+      [5, 0, 0],
       [5, 5, 5],
     ],
-    color: "yellow", // J-Tetromino
+    color: "green",
   },
   {
     shape: [
-      [0, 6, 6],
-      [6, 6, 0],
+      [0, 0, 6],
+      [6, 6, 6],
     ],
-    color: "green", // S-Tetromino
+    color: "#ff6400 ",
   },
-  {
-    shape: [
-      [7, 7, 0],
-      [0, 7, 7],
-    ],
-    color: "purple", // Z-Tetromino
-  },
+  { shape: [[7, 7, 7, 7]], color: "#00b5ff" },
 ];
 
-
-// 3) Random Tetromino Function
-
-function randTetromino(){
-  const index = Math.floor(Math.random()* tetrominoes.length);
+// Tetromino randomizer
+function randomTetromino() {
+  const index = Math.floor(Math.random() * tetrominoes.length);
   const tetromino = tetrominoes[index];
-  return{
-    shape:tetromino.shape,
-    color:tetromino.color,
-    row:0,
-    col:Math.floor(Math.random() * ( board_width - tetromino.shape[0].length + 1)),
-    
-  }
+  return {
+    shape: tetromino.shape,
+    color: tetromino.color,
+    row: 0,
+    col: Math.floor(Math.random() * (BOARD_WIDTH - tetromino.shape[0].length + 1)),
+  };
 }
 
+// Current tetromino
+let currentTetromino = randomTetromino();
+let currentGhostTetromino;
+
+// Draw tetromino
 function drawTetromino() {
   const shape = currentTetromino.shape;
   const color = currentTetromino.color;
@@ -94,7 +88,7 @@ function drawTetromino() {
 
   for (let r = 0; r < shape.length; r++) {
     for (let c = 0; c < shape[r].length; c++) {
-      if (shape[r][c]) { 
+      if (shape[r][c]) {
         const block = document.createElement("div");
         block.classList.add("block");
         block.style.backgroundColor = color;
@@ -107,6 +101,7 @@ function drawTetromino() {
   }
 }
 
+// Erase tetromino from the board
 function eraseTetromino() {
   for (let i = 0; i < currentTetromino.shape.length; i++) {
     for (let j = 0; j < currentTetromino.shape[i].length; j++) {
@@ -123,14 +118,15 @@ function eraseTetromino() {
   }
 }
 
-function canTetrominoRotate() {
-  for (let i = 0; i < roratedShape.length; i++) {
-    for (let j = 0; j < roratedShape[i].length; j++) {
-      if (roratedShape[i][j] !== 0) {
-        let row = currentTetromino.row + i;
-        let col = currentTetromino.col + j;
+// Check if tetromino can move in the specified direction
+function canTetrominoMove(rowOffset, colOffset) {
+  for (let i = 0; i < currentTetromino.shape.length; i++) {
+    for (let j = 0; j < currentTetromino.shape[i].length; j++) {
+      if (currentTetromino.shape[i][j] !== 0) {
+        let row = currentTetromino.row + i + rowOffset;
+        let col = currentTetromino.col + j + colOffset;
 
-        if (row >= board_height || col < 0 || col >= board_width || (row >= 0 && board[row][col] !== 0)) {
+        if (row >= BOARD_HEIGHT || col < 0 || col >= BOARD_WIDTH || (row >= 0 && board[row][col] !== 0)) {
           return false;
         }
       }
@@ -138,25 +134,27 @@ function canTetrominoRotate() {
   }
   return true;
 }
-function rotateTetromino() {
-  rotatedShape = [];
-  for (let i = 0; i < currentTetromino.shape[0].length; i++) {
-    let row = [];
-    for (let j = currentTetromino.shape.length - 1; j >= 0; j--) {
-      row.push(currentTetromino.shape[j][i]);
+
+// Check if tetromino can rotate
+function canTetrominoRotate() {
+  for (let i = 0; i < rotatedShape.length; i++) {
+    for (let j = 0; j < rotatedShape[i].length; j++) {
+      if (rotatedShape[i][j] !== 0) {
+        let row = currentTetromino.row + i;
+        let col = currentTetromino.col + j;
+
+        if (row >= BOARD_HEIGHT || col < 0 || col >= BOARD_WIDTH || (row >= 0 && board[row][col] !== 0)) {
+          return false;
+        }
+      }
     }
-    rotatedShape.push(row);
   }
-
-  if (canTetrominoRotate()) {
-    eraseTetromino();
-    currentTetromino.shape = rotatedShape;
-    drawTetromino();
-  }
-
-  moveGhostTetromino();
+  return true;
 }
+
+// Lock the tetromino in place
 function lockTetromino() {
+  // Add the tetromino to the board
   for (let i = 0; i < currentTetromino.shape.length; i++) {
     for (let j = 0; j < currentTetromino.shape[i].length; j++) {
       if (currentTetromino.shape[i][j] !== 0) {
@@ -167,15 +165,88 @@ function lockTetromino() {
     }
   }
 
+  // Check if any rows need to be cleared
   let rowsCleared = clearRows();
   if (rowsCleared > 0) {
-    // Optionally, handle row clearing effects here
+    // Play break sound and update score
+    breakSound.play();
+    updateScore(rowsCleared);
   }
 
+  // Create a new tetromino
   currentTetromino = randomTetromino();
-  drawTetromino();
-
-  if (!canTetrominoMove(1, 0)) {
-    gameOver();
-  }
+  drawGhostTetromino();
 }
+
+// Clear filled rows and move everything down
+function clearRows() {
+  let rowsCleared = 0;
+
+  for (let row = BOARD_HEIGHT - 1; row >= 0; row--) {
+    let isRowFull = true;
+
+    for (let col = 0; col < BOARD_WIDTH; col++) {
+      if (board[row][col] === 0) {
+        isRowFull = false;
+        break;
+      }
+    }
+
+    if (isRowFull) {
+      rowsCleared++;
+      // Move all rows above down by one
+      for (let r = row; r > 0; r--) {
+        for (let c = 0; c < BOARD_WIDTH; c++) {
+          board[r][c] = board[r - 1][c];
+          // Update the block position in the DOM
+          let blockAbove = document.getElementById(`block-${r - 1}-${c}`);
+          if (blockAbove) {
+            blockAbove.style.top = r * 24 + "px";
+            blockAbove.setAttribute("id", `block-${r}-${c}`);
+          }
+        }
+      }
+
+      // Clear the top row
+      for (let c = 0; c < BOARD_WIDTH; c++) {
+        board[0][c] = 0;
+        let blockTop = document.getElementById(`block-0-${c}`);
+        if (blockTop) {
+          document.getElementById("game_board").removeChild(blockTop);
+        }
+      }
+
+      row++; // Recheck the current row
+    }
+  }
+
+  return rowsCleared;
+}
+
+// Draw the ghost tetromino (the shadow showing where the tetromino will land)
+function drawGhostTetromino() {
+  // Remove the previous ghost
+  if (currentGhostTetromino) {
+    eraseTetromino();
+  }
+
+  // Copy current tetromino
+  currentGhostTetromino = JSON.parse(JSON.stringify(currentTetromino));
+
+  // Drop the ghost to the bottom
+  while (canTetrominoMove(1, 0)) {
+    currentGhostTetromino.row++;
+  }
+
+  // Draw the ghost tetromino
+  drawTetromino();
+}
+
+// Update score (placeholder function)
+function updateScore(rowsCleared) {
+  // Update the score based on the number of rows cleared
+  console.log(`Rows cleared: ${rowsCleared}`);
+}
+
+// Start the game (for demo purposes, triggering the first tetromino draw)
+drawTetromino();
