@@ -1,4 +1,3 @@
-
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 
@@ -241,6 +240,44 @@ document.addEventListener('keydown', event => {
         playerRotate(1);
     }
 });
+
+// Touch controls for mobile
+let startX, startY;
+function handleTouchStart(evt) {
+    const touch = evt.changedTouches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+}
+
+function handleTouchMove(evt) {
+    evt.preventDefault(); // Prevent scrolling during swipe
+}
+
+function handleTouchEnd(evt) {
+    const touch = evt.changedTouches[0];
+    const deltaX = touch.clientX - startX;
+    const deltaY = touch.clientY - startY;
+
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        // Horizontal swipe
+        if (deltaX > 0) {
+            playerMove(1); // Swipe right
+        } else {
+            playerMove(-1); // Swipe left
+        }
+    } else {
+        // Vertical swipe
+        if (deltaY > 0) {
+            playerDrop(); // Swipe down
+        } else {
+            playerRotate(1); // Swipe up or tap
+        }
+    }
+}
+
+canvas.addEventListener('touchstart', handleTouchStart, false);
+canvas.addEventListener('touchmove', handleTouchMove, false);
+canvas.addEventListener('touchend', handleTouchEnd, false);
 
 const colors = [
     null,
