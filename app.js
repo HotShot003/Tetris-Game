@@ -1,3 +1,4 @@
+
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 
@@ -90,11 +91,11 @@ function createPiece(type) {
     }
 }
 
-function drawMatrix(matrix, offset) {
+function drawMatrix(matrix, offset, isShadow = false) {
     matrix.forEach((row, y) => {
         row.forEach((value, x) => {
             if (value !== 0) {
-                context.fillStyle = colors[value];
+                context.fillStyle = isShadow ? 'rgba(255, 255, 255, 0.3)' : colors[value];
                 context.fillRect(x + offset.x,
                                  y + offset.y,
                                  1, 1);
@@ -111,7 +112,7 @@ function draw() {
 
     // Draw shadow
     const shadowPos = getShadowPosition(player);
-    drawMatrix(player.matrix, shadowPos);
+    drawMatrix(player.matrix, shadowPos, true);
 
     // Draw player piece
     drawMatrix(player.matrix, player.pos);
@@ -222,7 +223,7 @@ function update(time = 0) {
 }
 
 function updateScore() {
-    document.getElementById('score').innerText = player.score;
+    document.getElementById('score').innerText = 'Score: ' + player.score;
 }
 
 document.addEventListener('keydown', event => {
