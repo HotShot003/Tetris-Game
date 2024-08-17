@@ -31,7 +31,7 @@ Welcome to the Tetris Game Project repository! This project implements a classic
   
   - Use arrow keys (left, right, down) to move tetrominoes.
 
-  - Use the up arrow key to rotate tetrominoes clockwise.
+  - Use the Space key to rotate tetrominoes clockwise.
 
   - Press spacebar to drop tetrominoes instantly.
 
@@ -48,6 +48,10 @@ Welcome to the Tetris Game Project repository! This project implements a classic
 - Add levels with increasing difficulty.
 - Implement multiplayer mode.
 - Improve UI/UX with animations and sound effects.
+
+## Live Demo
+
+[![Live Demo](https://img.shields.io/badge/LiveDemo%20-%23276DC3.svg?&style=for-the-badge&logo=&logoColor=white)](https://hotshot003.github.io/Tetris-Game/)
 
 ## Contributing
 
