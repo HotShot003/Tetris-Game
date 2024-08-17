@@ -1,24 +1,23 @@
-<!DOCTYPE html>
 <html>
-  <head>
-    <title>Tetris Game</title>
-    <link rel="stylesheet" type="text/css" href="styles.css" />
+<head>
+    <title>Tetris</title>
     <style>
-      h1{
+      body {
+        background: #202028;
+        color: #fff;
+        font-family: sans-serif;
+        font-size: 2em;
         text-align: center;
-        padding-bottom: 30px;
-        font-size: 40px;
-        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-        color: rgba(11, 1, 11, 0.5);
-        
+      }
+      canvas {
+        border: solid .2em #fff;
+        height: 90vh;
       }
     </style>
-  </head>
-  <body>
-    <div class="game_board_wrap">
-      <h1>Tetris Game</h1>
-      <div id="game_board"></div>
-    </div>
+</head>
+<body>
+    <div id="score"></div>
+    <canvas id="tetris" width="240" height="400" />
     <script src="app.js"></script>
-  </body>
+</body>
 </html>
