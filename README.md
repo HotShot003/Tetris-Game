@@ -1,4 +1,4 @@
-# Tetris Game Project (In-Progress)
+# Tetris Game Project 
 
 Welcome to the Tetris Game Project repository! This project implements a classic Tetris game using HTML, CSS, and JavaScript.
 
