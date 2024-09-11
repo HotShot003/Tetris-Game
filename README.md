@@ -40,13 +40,17 @@ Welcome to the Tetris Game Project repository! This project implements a classic
 ## Development Notes
 
 - Implemented using vanilla JavaScript for game logic.
+  
 - Used CSS Flexbox/Grid for responsive layout.
+  
 - Challenges included managing tetromino movement and rotation logic.
 
 ## Future Enhancements
 
 - Add levels with increasing difficulty.
+  
 - Implement multiplayer mode.
+  
 - Improve UI/UX with animations and sound effects.
 
 ## Live Demo
