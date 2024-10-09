@@ -61,6 +61,6 @@ Welcome to the Tetris Game Project repository! This project implements a classic
 
 Contributions are welcome! Fork the repository and submit a pull request with your enhancements.
 
-Thank You 😊
+ThankYou 😊
 
 
